@@ -28,7 +28,7 @@ struct TokenDetails {
 }
     
 // outer layout
-(
+
 mapping(address => TokenDetails) public tokendetails;
 address [] public allSupportedTokens;
 address public owner;
@@ -73,7 +73,21 @@ modifier onlyCreater(address _creator) {
 function createICOSale(address _token, uint256 _price) external{
     IERC20 token = IERC20(_token);
     string memory tokenName = token.name();
-    string memory tokenSymbol = token.symbol()
+    string memory tokenSymbol = token.symbol();
+
+    tokenDetails[_token] = TokenDetails({
+        token : _token,
+        supported : true,
+        price : _price,
+        creator: _creator,
+        name : tokenName,
+        symbol : tokenSymbol
+    });
+
+    allSupportedTokens.push(_token);
+
+    // initializing add token event
+    emit TokenAdded(_token , _price, msg.sender, tokenName, tokenSymbol) 
 }
 
 
@@ -83,29 +97,113 @@ function multiply(uint256 x, uint256 y ) internal returns (uint256 z) {}
 
 // buyToken
 
+
 // amount = how many token
 // price = on current token price
 function buyToken(address _token, uint256 _amount)  supportedToken(_token){
+ require(amount >  0, "Amount must be greater than the 0 ");
+
+// 
+
+TokenDetails memory details = tokenDetails[_tokens];
+
+//total cost for user on purcahse
+uint256 totalCost = multiply (details.price, _amount);
+require(msg.value == totalCost, "Incorrect Ether amount sent");
+
+//transferring pymnt from contract to the creator(purchasing user)
+(bool.sent,) = details.creator.call{value : msg.value} ("");
+require(sent, "Failed to transfer ether to the creator");
+
+//tranfser token back to user	 
+IERC20 token = IERC20(_token);
+
+require(token.transfer(msg.sender, _amount * 10**8), "Transfer Failed");
+
+//init evnt
+emit TokenTransferred(_token, msg.sender, _amount);
+
+
 }
 
 // getting balance
- function getBalance(address _token) external view returns(uint256){}
+ function getBalance(address _token) external view returns(uint256){
+  require(tokenDetails[_token].supported, "Token not supported");
+ 
+ //address tokenAddress == address(_token);
+ //require(tokenAddress != address(0), "Token contract not found");
+ 
+  IERC20 token = IERC20(_token);
+  return token.balanceOf(address(this));
+ 
+}
 
 
 // returning list of supported token
  function getSupportedToken() external view  returns (address[] memory) {
- } 
+  return allSupportedTOkens; 
+} 
 
 //  wihtdraw fnc
-function withdraw(address _token , uint256 amount) external onlyCreater(_token) supportedToken(_token){}
+function withdrawToken (address _token , uint256 amount) external onlyCreater(_token) supportedToken(_token){
+ require(_amount > 0, "amount must be greater than 0");
+ 
+//building relationship with interface
+ IERC20 token = IERC20(_token)
 
-// for check price and comapare tokenis left in conrtact for sale or not
-function getTokenDetails(address _token) external view returns(TokenDetails[] memory) {}
+//checking balance first in the contract
+uint256 balance = token.balanceOf(address(this));
+require(balance >= _amount, "Insufficinet token balance");
+
+//handling the withdrawl/transferring
+
+require(token.transfer(msg.sender, _amount), "Token transfer failed");
+
+//
+emit TokenWithdraw(token, msg.sender,_amount);
+
+}
+
+// for checking price and comapare token is left in conrtact for sale or not
+function getTokenDetails(address _token) external view returns(TokenDetails[] memory) {
+ require(tokenDetails[_token].supported, "Token not supported");
+
+ return tokenDetails[_token];
+ 
+}
 
 // get token created bu specifi users
-function getCreatedBy(address _creator) external view returns (TokenDetails[] memory) {}
+function getCreatedBy(address _creator) external view returns (TokenDetails[] memory) {
+ //counting the length 
+ // checking of how many tokens are created by creator
 
-function getAllTokens()  external view returns (TokenDetails[] memory) {}
+ uint256 = 0;
+ 
+//calculate lenght
+for(uint256 i =0; i < allSupportedTokens.length; i++) {
+  if(tokenDetails[allSupportedTokens[i]].creator == _creator) {
+  count++;
+}
+} 
+ TokenDetails[] memory tokens = new TokenDetails[](count);
+ uint256 indexed = 0;	
+ for(uint256 i= 0; i <allSupportedTokens.lenght; i++) {
+ tokens[index] = tokenDetails[allSupportedTokens[i]];
+ index++;
+}
+ returns tokens; 
+}
+
+function getAllTokens()  external view returns (TokenDetails[] memory) { 
+ uint256 length = allSupportedTokens.length;
+ 
+ TokenDetails[] memory tokens = new TokensDetails[] (length);
+ for(uint256 i = 0; i < length; i++){
+ tokens[i] = tokenDetails[allSupportedTokens[i]];
+
+}
+  returns tokens;
+}
 
 }
 
