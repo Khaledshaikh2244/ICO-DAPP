@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { Web3Modal } from "Web3modal";
 
 // importing ABI's
-import ERC2oGenerator from "./ERC20Generator.json";
+import ERC20Generator from "./ERC20Generator.json";
 import icoMarketplace from "./icoMarketplace.json";
 
 // exporting and getting bytecode
@@ -14,8 +14,8 @@ export const ICO_MARKETPLACE_ADDRESS = process.env.NEXT_PUBLIC_ICO_MARKETPLACE_A
 export const ICO_MARKETPLACE_ABI =icoMarketplace.abi;
 
 // getting PINATA KEY
-export const NEXT_PUBLIC_PINATA_AIP_KEY =   process.env.NEXT_PUBLIC_PINATA_API_KEY;
-export const NEXT_PUBLIC_PINATA_SECRECT_KEY = process.env.NEXT_PUBLIC_PINATA_SECRET_KEY;
+export const PINATA_AIP_KEY =   process.env.NEXT_PUBLIC_PINATA_API_KEY;
+export const PINATA_SECRECT_KEY = process.env.NEXT_PUBLIC_PINATA_SECRET_KEY;
 
 
 // netowork config

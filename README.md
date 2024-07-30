@@ -5,7 +5,7 @@
 
 Build & Deploy Your Own ICO Marketplace and Token Creator
 
-Dive into the world of blockchain and cryptocurrency with our comprehensive guide to building and deploying your own ICO Marketplace and Token Creator. This course covers everything from the basics of Initial Coin Offerings (ICOs) to advanced development techniques. Learn how to create, manage, and deploy tokens on the Ethereum blockchain, design a user-friendly marketplace, and ensure the security and scalability of your platform. Whether you're an entrepreneur, developer, or blockchain enthusiast, this guide will provide you with the knowledge and tools you need to launch a successful ICO and drive your project to new heights.
+Dive into the world of blockchain and cryptocurrency with our comprehensive guide to building and deploying your own ICO Marketplace and Token Creator. This covers everything from the basics of Initial Coin Offerings (ICOs) to advanced development techniques. Learn how to create, manage, and deploy tokens on the Ethereum blockchain, design a user-friendly marketplace, and ensure the security and scalability of your platform. Whether you're an entrepreneur, developer, or blockchain enthusiast, this guide will provide you with the knowledge and tools you need to launch a successful ICO and drive your project to new heights.
 
 ## Project Overview
 
@@ -13,7 +13,7 @@ Dive into the world of blockchain and cryptocurrency with our comprehensive guid
 Kindly follow the following Instructions to run the project in your system and install the necessary requirements
 
 ```https://code.visualstudio.com/download
-  WATCH: Setup & Demo Of Project
+ 
 ```
 
 #### Install Vs Code Editor
@@ -29,25 +29,7 @@ Kindly follow the following Instructions to run the project in your system and i
   NPM: 8.19.2 || LATEST
 
 
-#### Setup Video
 
-```https://code.visualstudio.com/download
-  WATCH: Setup & Demo Of Project
-```
-
-
-#### Install Vs Code Editor
-
-```https://code.visualstudio.com/download
-  GET: VsCode Editor
-```
-
-#### NodeJs & NPM Version
-
-```https://nodejs.org/en/download
-  NodeJs: v18.12.1 || LATEST
-  NPM: 8.19.2 || LATEST
-```
 
 #### Test Faucets
 
