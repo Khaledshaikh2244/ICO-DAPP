@@ -78,6 +78,38 @@ const checkIfWalletConnected = async () => {
     }
 }
 
+
+const connectWallet = async () => {
+    try {
+        if(!window.ethereum) return notifyError("NO account found");
+        const accounts = await ethereum.request({
+            method: "eth_requestAccounts",
+        })
+        //getting first account of from array accounts
+
+        if(accounts.lenght) {
+            setAddress(accounts[0]);
+
+        // getting balance of account[0];
+        const provider = new ethers.providers.Web3Provider(connection);
+        const getBalance = await provider.getBalance(address[0]);
+        
+        // converting balance storing in SV
+        const bal = ethers.utils.formatEther(getBalance);
+        setAccountBalance(bal);
+        return accounts[0];
+        }
+        else{
+          notifyError("no account found"); 
+        }
+    } catch (error) {
+        console.log(error);
+        notifyError("NO account found");
+
+    }
+}
+
+
 return <StateContext.Provider value={{}}>{Children}</StateContext.Provider>
         
     
