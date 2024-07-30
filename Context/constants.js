@@ -113,8 +113,53 @@ const fetchContract = (address,abi , signer) => new ehters.Contract(address, abi
 //making connection using Web3Modal
 export const ICO_MARKETPLACE_CONTRACT = async () => {
     try {
-        const Web3Modal = Web3Modal();
-        const connection = await  Web3Modal.connect();
+        const web3Modal = Web3Modal();
+        const connection = await  web3Modal.connect();
+        // getting provider
+        const provider = new ethers.providers.Web3Provider(connection);
+
+        // getting signer 
+
+        const signer = provider.getSigner(); 
+
+        //calling fethc contract internally to return contract
+        const contract = fetchContract(
+            ICO_MARKETPLACE_ADDRESS,
+            ICO_MARKETPLACE_ABI,
+            signer
+        );
+
+        //returning for calling in required fnc
+        return contract;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+//TOKEN CONTRACT
+
+export const TOKEN_CONTRACT = async (TOKEN_ADDRESS) => {
+    try {
+        const web3Modal = Web3Modal();
+        const connection = await  web3Modal.connect();
+        // getting provider
+        const provider = new ethers.providers.Web3Provider(connection);
+
+        // getting signer 
+
+        const signer = provider.getSigner(); 
+
+        //calling fethc contract internally to return contract
+        const contract = fetchContract(
+            TOKEN_ADDRESS,
+            ERC20Generator_ABI,
+            signer
+        );
+
+        //returning for calling in required fnc
+        return contract;
     } catch (error) {
         console.log(error);
     }
