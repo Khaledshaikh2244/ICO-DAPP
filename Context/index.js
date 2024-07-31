@@ -18,6 +18,7 @@ import { ERC20Generator,
 
         } from './constants';
 import { use } from "chai";
+import { id } from "ethers/lib/utils";
 
 
 export const StateContext = createContext();
@@ -76,7 +77,7 @@ const checkIfWalletConnected = async () => {
         notifyError("NO account found");
 
     }
-}
+};
 
 
 const connectWallet = async () => {
@@ -107,7 +108,98 @@ const connectWallet = async () => {
         notifyError("NO account found");
 
     }
+};
+
+// MAIN FUNCTION 
+const _deployContract = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const _createERC20 = async (token, account, imageURL) => {
+    
+    // deconstr data from token
+    const  {name, symbol, supply} = token;
+
+    try {
+    setLoader(true);
+    notifySuccess("Creating Token...");
+    if(!name || !symbol ||  !supply){
+        notifyError("Data missing");
+    }
+    else{
+        const web3Modal = Web3Modal();
+        const connection = await  web3Modal.connect();
+      
+        // getting provider
+        const provider = new ethers.providers.Web3Provider(connection);
+
+         // getting signer 
+         const signer = provider.getSigner(); 
+
+         _deployContract(signer,account,name, symbol, supply, imageURL);
+    }
+    } catch (error) {
+        setLoader(false);
+        notifyError("Something went wrong, try later");
+
+        console.log(error);
+    }
+};
+
+
+const GET_ALL_ICO_SALE_TOKEN = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
 }
+
+const GET_ICO_USER_SALE_TOKEN = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const createICOSALE  = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const buyToken  = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const transferToken  = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const withDrawToken  = async () => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 
 return <StateContext.Provider value={{}}>{Children}</StateContext.Provider>
