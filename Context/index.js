@@ -15,6 +15,7 @@ import { ERC20Generator,
          TOKEN_CONTRACT,
          PINATA_AIP_KEY,
          PINATA_SECRECT_KEY,
+         ERC20Generator_ABI,
 
         } from './constants';
 import { use } from "chai";
@@ -111,14 +112,70 @@ const connectWallet = async () => {
 };
 
 // MAIN FUNCTION 
-const _deployContract = async () => {
+const _deployContract = async (signer,account,name, symbol, supply, imageURL) => {
+//    const factory = new ethers.ContractFactory( 
+//     ERC20Generator_ABI,
+//     ERC20Generator_BYTECODE,
+//     signer
+//    )
     try {
+        const factory = new ethers.ContractFactory(
+            ERC20Generator_ABI,
+            ERC20Generator_BYTECODE,
+            signer
+        );
+
+        //call depoloy fnc
+        const totalSupply = Number(supply);
+         const _initalSupply =ethers.utils.parseEther(totalSupply.toString(),"ether")
         
+        let contract = await factory.deploy(_initalSupply,name,symbol);
+
+        const transaction = await contract.deployed();
+        if(contract.address) {
+            const today = new Date.now();
+            let date = new Date(today);
+            const _tokenCreatedDate = date.toLocaleDateString("en-US");
+
+            //creating token variable object to stron lS
+            const token = {
+                account : account,
+                supply :  supply.toString(),
+                name : name,
+                symbol  : symbol,
+                tokenAddress : contract.address,
+                //already available in deployed contract
+                transactionHash : contract.deployTransaction.hash,
+                createAt : _tokenCreatedDate,
+                logo : imageURL
+            }
+                 
+            let tokenHistory = [];
+
+            const history = localStorage.getItem("TOKEN_HISTORY");
+            if(history){
+                tokenHistory = JSON.parse(localStorage.getItem("TOKEN_HISTORY"));
+                tokenHistory.push(_token);
+                localStorage.setItem("TOKEN_HISTORY" , tokenHistory);
+                setLoader(false);
+                setRecall(reCall + 1);
+                setOpenTokenCreator(false);
+            }
+            else{
+                tokenHistory.push(_token);
+                localStorage.setItem("TOKEN_HISTORY" , tokenHistory);
+                setLoader(false);
+                setRecall(reCall + 1);
+                setOpenTokenCreator(false);
+            }
+        }
     } catch (error) {
+        setLoader(false);
+        notifyError("Something went wrong, try later");
         console.log(error);
     }
 };
-
+//1st step of main fnc
 const _createERC20 = async (token, account, imageURL) => {
     
     // deconstr data from token
@@ -145,7 +202,6 @@ const _createERC20 = async (token, account, imageURL) => {
     } catch (error) {
         setLoader(false);
         notifyError("Something went wrong, try later");
-
         console.log(error);
     }
 };
