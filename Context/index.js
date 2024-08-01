@@ -200,6 +200,7 @@ const _createERC20 = async (token, account, imageURL) => {
          _deployContract(signer,account,name, symbol, supply, imageURL);
     }
     } catch (error) {
+       
         setLoader(false);
         notifyError("Something went wrong, try later");
         console.log(error);
