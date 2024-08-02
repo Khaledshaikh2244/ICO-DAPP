@@ -41,7 +41,7 @@ const [openBuyToken, setOpenBuyToken] = useState(false);
 const [openWithDrawTOken, setOpenWithDrawToken] = useState(false);    
 const [openTransferToken, setOpenTransferToken] = useState(false);
 const [openTokenCreator, setTokenCreator] = useState(false);
-const [openCreateIICO, setOpenCreateIICO] = useState(false);
+const [openCreateICO, setOpenCreateICO] = useState(false);
 
 
 const notifySuccess = (msg) => {toast.success(msg,{duration:200})};
@@ -113,7 +113,8 @@ const connectWallet = async () => {
 
 // MAIN FUNCTION 
 const _deployContract = async (signer,account,name, symbol, supply, imageURL) => {
-//    const factory = new ethers.ContractFactory( 
+// 2nd  
+//  const factory = new ethers.ContractFactory( 
 //     ERC20Generator_ABI,
 //     ERC20Generator_BYTECODE,
 //     signer
@@ -224,10 +225,38 @@ const GET_ICO_USER_SALE_TOKEN = async () => {
     }
 };
 
-const createICOSALE  = async () => {
+// 3rd
+const createICOSALE  = async (icoSale) => {
     try {
+        // user has to provide address & price 
+        // before creating icoSale within our icoContract
+        const {address , price} = icoSale;
+        if(!address || !prcie) return notifyError("data is missing");    
+        setLoader(true);
+        notifySuccess("Creating ICO sale");
+        connectWallet();
+
+        const contract = ICO_MARKETPLACE_CONTRACT;
+
+        // conveting price
+        const payAmount = ethers.utils.parseUnits(price.toString(), "ethers");
         
+        //calling fnc from Presale.sol
+        const transaction = await contract.createICOSALE(address,payAmount, {
+            gasLimit:ethers.utils.hexlify(8000000),
+        });
+
+        await transaction.wait();
+
+        if(transaction.hash){
+            setLoader(false);
+            setOpenCreateICO(false);
+            setReCall(reCall + 1);
+        }
     } catch (error) {
+        setLoader(false);
+        setOpenCreateICO(false);
+        notifyError("something went wrong")
         console.log(error);
     }
 };
