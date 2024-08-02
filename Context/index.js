@@ -305,7 +305,7 @@ const buyToken  = async (tokenAddress , tokenQuantity) => {
     }
 };
 
-const transferToken  = async () => {
+const transferToken  = async (transferTokenData) => {
     try {
         
     } catch (error) {
@@ -316,6 +316,7 @@ const transferToken  = async () => {
 
 const withDrawToken  = async () => {
     try {
+       
         
     } catch (error) {
         console.log(error);
