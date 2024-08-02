@@ -261,10 +261,46 @@ const createICOSALE  = async (icoSale) => {
     }
 };
 
-const buyToken  = async () => {
+// 4th
+const buyToken  = async (tokenAddress , tokenQuantity) => {
     try {
+        setLoader(true);
+        notifySuccess("purchasing is happening...");
         
+        const address = await connectWallet();
+        const contract = await ICO_MARKETPLACE_CONTRACT;
+
+        //getting data from smart contract
+        const _tokenBal = await contract.getBalance(tokenAddress);
+        const _tokenDetails =  await contract.getTokenDetails(tokenAddress);
+
+        const availableToken = ethers.utils.formatEther(_tokenBal.toString());
+         
+        if(availableToken > 0 ) {
+            const price = ethers.utils.formatEther(_tokenDetails.price.toString()) * Number(tokenQuantity);
+            const payAmount = ethers.utils.parseUnits(price.toString(), "ether");
+
+            const transaction = await buyToken(tokenAddress, Number(tokenQuantity), {
+                value : payAmount.toString(),
+                gasLimit : ethers.utils.hexlify(8000000)
+            });
+
+            await transaction.wait();
+            setLoader(false);
+            setReCall(reCall + 1);
+            setOpenBuyToken(false);
+            setOpenCreateICO(false);
+            notifySuccess("Transcation completed Successfully");
+        }
+        else{
+            setOpenBuyToken(false);
+            setOpenCreateICO(false);
+            notifyError("your token balance is 0"); 
+        }
     } catch (error) {
+        setLoader(false);
+        setOpenBuyToken(false);
+        setOpenCreateICO(false);
         console.log(error);
     }
 };
