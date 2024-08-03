@@ -307,18 +307,83 @@ const buyToken  = async (tokenAddress , tokenQuantity) => {
 
 const transferToken  = async (transferTokenData) => {
     try {
+        if(!transferTokenData.address || !transferTokenData.amount || !transferTokenData.tokenAdd)
+            return notifyError("token data missing");
+
+        setLoader(true);
+        notifySuccess("Transaction is processing...");
+        const address = await connectWallet();
+
+        const contract = await ICO_MARKETPLACE_CONTRACT;
+        const _availableBal = contract.balanceOf(address);
+        const availableToken = ethers.utils.formatEther(_availableBal.toString());
         
+        if(availableToken > 1 ) {
+            const payAmount = ethers.utils.parseUnits(
+            transferTokenData.amount.toString(),
+            "ether"
+            );
+
+        const transaction = await contract.transfer(
+              transferTokenData.address, payAmount,{
+              gasLimit: ethers.utils.hexlify(8000000),
+            }
+        );
+        await transaction.wait();
+        setLoader(false);
+        serReCall(reCall + 1);
+        setOpenTransferToken(false);
+        notifySuccess("transaction completed successfully");    
+        }
+
+        else{
+            setLoader(false);
+            serReCall(reCall + 1);
+            setOpenTransferToken(false);
+            notifyError("Your balance is 0");
+        }
     } catch (error) {
+            setLoader(false);
+            serReCall(reCall + 1);
+            setOpenTransferToken(false);
+            notifyError("something went wrong ");
         console.log(error);
     }
 };
 
 
-const withDrawToken  = async () => {
+const withDrawToken  = async (withdrawQuantity) => {
     try {
+       if(!withdrawQuantity.amount || !withdrawQuantity.token) return notifyError("Data is missing");
        
-        
-    } catch (error) {
+       setLoader(true);
+       notifySuccess("Transaction being process...");
+
+       const address = await connectWallet();
+       const contract = await ICO_MARKETPLACE_CONTRACT;
+
+       const payAmount =  ethers.utils.parseUnits(
+        withdrawQuantity.amount.toString(),
+        "ether"
+       );
+
+       const transaction = await contract.withdrawToken(
+        withdrawQuantity.token, payAmount,{
+            gasLimit: ethers.utils.hexlify(8000000),
+        }
+       )
+       
+       transaction.wait();
+
+        setLoader(false);
+        setReCall = reCall + 1;
+        setOpenWithDrawToken(false);
+        notifySuccess("Transaction completed Successfully")
+    }   catch (error) {
+        setLoader(false);
+        setReCall = reCall + 1;
+        setOpenWithDrawToken(false);
+        notifyError("Something went wrong")
         console.log(error);
     }
 };
@@ -329,3 +394,4 @@ return <StateContext.Provider value={{}}>{Children}</StateContext.Provider>
         
     
 }
+export const useStateContext = () => useContext(StateContext);
