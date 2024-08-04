@@ -211,7 +211,22 @@ const _createERC20 = async (token, account, imageURL) => {
 
 const GET_ALL_ICO_SALE_TOKEN = async () => {
     try {
-        
+        setLoader(true);
+        const address = await connectWallet();
+        const contract = await ICO_MARKETPLACE_CONTRACT;
+
+        if(address) {
+            const allICOSaleToken = await contract.getAllTokens();
+
+            const _tokenArray = Promise.all(
+                allICOSaleToken.map(async(token)=>{
+                    const tokenContract = await TOKEN_CONTRACT(token?.token);
+
+
+                    
+                })
+            )
+        }
     } catch (error) {
         console.log(error);
     }
@@ -235,7 +250,7 @@ const createICOSALE  = async (icoSale) => {
         setLoader(true);
         notifySuccess("Creating ICO sale");
         connectWallet();
-
+   new
         const contract = ICO_MARKETPLACE_CONTRACT;
 
         // conveting price
