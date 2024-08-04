@@ -149,7 +149,7 @@ function getTokenDetails(address _token) external view returns (TokenDetails mem
 }
 
 // get tokens created by specific user
-function getCreatedBy(address _creator) external view returns (TokenDetails[] memory) {
+function getTokenCreatedBy(address _creator) external view returns (TokenDetails[] memory) {
     // counting the length 
     // checking how many tokens are created by creator
     uint256 count = 0;
