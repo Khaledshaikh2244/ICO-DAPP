@@ -250,7 +250,7 @@ const createICOSALE  = async (icoSale) => {
         setLoader(true);
         notifySuccess("Creating ICO sale");
         connectWallet();
-   new
+   new name =""
         const contract = ICO_MARKETPLACE_CONTRACT;
 
         // conveting price
