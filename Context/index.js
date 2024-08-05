@@ -94,7 +94,8 @@ const connectWallet = async () => {
             setAddress(accounts[0]);
 
         // getting balance of account[0];
-        const provider = new ethers.providers.Web3Provider(connection);
+        // const provider = new ethers.providers.Web3Provider(connection);
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
         const getBalance = await provider.getBalance(address[0]);
         
         // converting balance storing in SV
