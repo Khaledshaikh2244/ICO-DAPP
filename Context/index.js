@@ -53,6 +53,7 @@ const notifyError = (msg) => {toast.error(msg,{duration:200})};
 const checkIfWalletConnected = async () => {
     try {
         if(!window.ethereum) return notifyError("NO account found");
+        await handleNetworkSwitch();
         const accounts = await ethereum.request({
             method: "eth_accounts",
         })
@@ -81,10 +82,15 @@ const checkIfWalletConnected = async () => {
     }
 };
 
+//Trgger when there change in the address;
+useEffect(()=> {
+    checkIfWalletConnected();
+}, [address])
 
 const connectWallet = async () => {
     try {
         if(!window.ethereum) return notifyError("NO account found");
+        await handleNetworkSwitch();
         const accounts = await ethereum.request({
             method: "eth_requestAccounts",
         })
@@ -95,7 +101,7 @@ const connectWallet = async () => {
 
         // getting balance of account[0];
         // const provider = new ethers.providers.Web3Provider(connection);
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
         const getBalance = await provider.getBalance(address[0]);
         
         // converting balance storing in SV
@@ -234,7 +240,7 @@ const GET_ALL_ICO_SALE_TOKEN = async () => {
                         name    : token.name,
                         symbol  : token.symbol,
                         supported : token.supported,
-                        price   :  ethers.utils.formatEther(token?.prcie.toString()),
+                        price   :  ethers.utils.formatEther(token?.price.toString()),
                         icoSaleBal : ethers.utils.formatEther(balance.toString()),
                     }
                 })
@@ -328,8 +334,10 @@ const buyToken  = async (tokenAddress , tokenQuantity) => {
     try {
         setLoader(true);
         notifySuccess("purchasing is happening...");
-        
+        if(!tokenQuantity || !tokenAddress) return notifyError("Data missing");
         const address = await connectWallet();
+
+
         const contract = await ICO_MARKETPLACE_CONTRACT;
 
         //getting data from smart contract
@@ -376,7 +384,8 @@ const transferToken  = async (transferTokenData) => {
         notifySuccess("Transaction is processing...");
         const address = await connectWallet();
 
-        const contract = await ICO_MARKETPLACE_CONTRACT;
+        // const contract = await ICO_MARKETPLACE_CONTRACT;
+        const contract = await TOKEN_CONTRACT   (transferTokenData.tokenAdd);
         const _availableBal = contract.balanceOf(address);
         const availableToken = ethers.utils.formatEther(_availableBal.toString());
         
@@ -452,7 +461,32 @@ const withDrawToken  = async (withdrawQuantity) => {
 
 
 
-return <StateContext.Provider value={{}}>{Children}</StateContext.Provider>
+return <StateContext.Provider value={{
+    withDrawToken,
+    transferToken,
+    buyToken,
+    createICOSALE,
+    GET_ICO_USER_SALE_TOKEN,
+    GET_ALL_ICO_SALE_TOKEN,
+    _createERC20,
+    connectWallet,
+    PINATA_AIP_KEY,
+    PINATA_SECRECT_KEY,
+    ICO_MARKETPLACE_ADDRESS,
+    openBuyToken,
+    setOpenBuyToken,
+    openWithDrawTOken, setOpenWithDrawToken,
+    openTransferToken, setOpenTransferToken,
+    openTokenCreator, setTokenCreator,
+    openCreateICO, setOpenCreateICO,
+    openCreateICO, setOpenCreateICO,
+    address , setAddress,
+    accountBalance,
+    loader,
+    setLoader,
+    currency,
+    shortenAddress,
+    }}>{Children}</StateContext.Provider>
         
     
 }
