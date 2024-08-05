@@ -60,7 +60,7 @@ const netoworks = {
         blockExplorerUrls: ["https://www.bscscan.com"],
     },
 
-    bsc : {
+    base_mainnet : {
         chainId : `0x${Number(56).toString(16)}`,
         chainName : "Base Mainnet",
         nativeCurrency :{
@@ -82,7 +82,7 @@ const changeNetwork =  async({networkName}) => {
         //  checking of wallet
         if(!window.ethereum) throw new Error("No crypto Wallet found ");
         await window.ethereum.request({
-            ...networkName[networkName],
+            ...networks[networkName],
         });
     } catch (error) {
         console.log(error);
@@ -101,7 +101,7 @@ await changeNetwork({networkName})
 
 // shorting the address
 
-export const shortenAddress =  (address) => `${address?.slice(0,5)}...${address?.length-4}`;
+export const shortenAddress =  (address) => `${address?.slice(0,5)}...${address?.slice(address.length -4)}`;
 
 // contract functionality
 
