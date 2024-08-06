@@ -47,3 +47,11 @@ then copy and paste ABI and paste into icoMarketplace.json located in Context fo
 Context 2
 Wrting context management
 importing some lib:  ether web3modal 
+
+
+context3
+
+--building context setup in the pages/app.js
+
+
+all compoents assigned in single page(SPA) : pages/index.js

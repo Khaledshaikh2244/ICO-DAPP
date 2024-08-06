@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { Web3Modal } from "Web3modal";
+import { Web3Modal } from "web3modal";
 
 // importing ABI's
 import ERC20Generator from "./ERC20Generator.json";
@@ -18,86 +18,159 @@ export const PINATA_AIP_KEY =   process.env.NEXT_PUBLIC_PINATA_API_KEY;
 export const PINATA_SECRECT_KEY = process.env.NEXT_PUBLIC_PINATA_SECRET_KEY;
 
 
-// netowork config
+// // netowork config
 
-const netoworks = {
-    polygon_amoy : {
-        chainId : `0x${Number(8002).toString(16)}`,
-        chainName : "Polygon Amoy",
-        nativeCurrency :{
-            name : "MATIC",
+// const networks = {
+//     polygon_amoy : {
+//         chainId : `0x${Number(8002).toString(16)}`,
+//         chainName : "Polygon Amoy",
+//         nativeCurrency :{
+//             name : "MATIC",
+//             symbol: "MAT",
+//             decimals: 18,
+//         },
+//         // providing rpc URLS
+//         rpcUrls: ["https://rpc-amoy.polygon.technology/"],
+//         blockExplorerUrls: ["https://www.oklink.com/amoy"],
+//     },
+
+//     polygon : {
+//         chainId : `0x${Number(137).toString(16)}`,
+//         chainName : "Polygon Mainnet",
+//         nativeCurrency :{
+//             name : "MATIC",
+//             symbol: "MAT",
+//             decimals: 18,
+//         },
+//         // providing rpc URLS
+//         rpcUrls: ["https://rpc.ankr.com/polygon"],
+//         blockExplorerUrls: ["https://www.polyscan.com"],
+//     },
+
+//     bsc : {
+//         chainId : `0x${Number(56).toString(16)}`,
+//         chainName : "Binance Mainnet",
+//         nativeCurrency :{
+//             name : "Binance Chain",
+//             symbol: "BNB",
+//             decimals: 18,
+//         },
+//         // providing rpc URLS
+//         rpcUrls: ["https://rpc.ankr.com/bsc"],
+//         blockExplorerUrls: ["https://www.bscscan.com"],
+//     },
+
+//     base_mainnet : {
+//         chainId : `0x${Number(56).toString(16)}`,
+//         chainName : "Base Mainnet",
+//         nativeCurrency :{
+//             name : "ETH",
+//             symbol: "ETH",
+//             decimals: 18,
+//         },
+//         // providing rpc URLS
+//         rpcUrls: ["https://base.mainnet.org"],
+//         blockExplorerUrls: ["https://www.bscscan.com"],
+//     },
+// };
+
+
+// // fnc to look for specific network --trigger
+
+// const changeNetwork =  async({networkName}) => {
+//     try {
+//         //  checking of wallet
+//         if(!window.ethereum) throw new Error("No crypto Wallet found ");
+//         await window.ethereum.request({
+//             ...networks[networkName],
+//         });
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
+
+
+// //calling the fnc
+// //switiching the network according to user
+
+
+// export const handleNetworkSwitch = async () => {
+// const networkName = "poly_amoy";
+// await changeNetwork({networkName})
+// }
+
+const networks = {
+    polygon_amoy: {
+        chainId: `0x${Number(8002).toString(16)}`,
+        chainName: "Polygon Amoy",
+        nativeCurrency: {
+            name: "MAT",
             symbol: "MAT",
             decimals: 18,
         },
-        // providing rpc URLS
         rpcUrls: ["https://rpc-amoy.polygon.technology/"],
         blockExplorerUrls: ["https://www.oklink.com/amoy"],
     },
-
-    polygon : {
-        chainId : `0x${Number(137).toString(16)}`,
-        chainName : "Polygon Mainnet",
-        nativeCurrency :{
-            name : "MATIC",
-            symbol: "MAT",
-            decimals: 18,
-        },
-        // providing rpc URLS
-        rpcUrls: ["https://rpc.ankr.com/polygon"],
-        blockExplorerUrls: ["https://www.polyscan.com"],
-    },
-
-    bsc : {
-        chainId : `0x${Number(56).toString(16)}`,
-        chainName : "Binance Mainnet",
-        nativeCurrency :{
-            name : "Binance Chain",
-            symbol: "BNB",
-            decimals: 18,
-        },
-        // providing rpc URLS
-        rpcUrls: ["https://rpc.ankr.com/bsc"],
-        blockExplorerUrls: ["https://www.bscscan.com"],
-    },
-
-    base_mainnet : {
-        chainId : `0x${Number(56).toString(16)}`,
-        chainName : "Base Mainnet",
-        nativeCurrency :{
-            name : "ETH",
-            symbol: "ETH",
-            decimals: 18,
-        },
-        // providing rpc URLS
-        rpcUrls: ["https://base.mainnet.org"],
-        blockExplorerUrls: ["https://www.bscscan.com"],
-    },
+    // other networks...
 };
 
-
-// fnc to look for specific network --trigger
-
-const changeNetwork =  async({networkName}) => {
+const isPendingRequest = async () => {
     try {
-        //  checking of wallet
-        if(!window.ethereum) throw new Error("No crypto Wallet found ");
-        await window.ethereum.request({
-            ...networks[networkName],
+        const result = await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [],
         });
+        return false;
     } catch (error) {
-        console.log(error);
+        if (error.code === -32002) {
+            return true;
+        }
+        return false;
     }
 };
 
+const changeNetwork = async ({ networkName }) => {
+    try {
+        if (!window.ethereum) throw new Error("No crypto wallet found");
 
-//calling the fnc
-//switiching the network according to user
+        const network = networks[networkName];
 
+        const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (currentChainId === network.chainId) {
+            console.log("Already on the desired network");
+            return;
+        }
+
+        const pending = await isPendingRequest();
+        if (pending) {
+            console.error("Request to add Ethereum chain already pending. Please wait.");
+            return;
+        }
+
+        await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [network],
+        });
+    } catch (error) {
+        if (error.code === 4001) {
+            console.error("User rejected the request.");
+        } else if (error.code === -32602) {
+            console.error("Invalid parameters provided.");
+        } else {
+            console.error("Error changing network:", error);
+        }
+    }
+};
 
 export const handleNetworkSwitch = async () => {
-const networkName = "poly_amoy";
-await changeNetwork({networkName})
-}
+    const networkName = "polygon_amoy";
+    await changeNetwork({ networkName });
+};
+
+
+
+
+
 
 // shorting the address
 
