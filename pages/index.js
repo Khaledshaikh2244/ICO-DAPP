@@ -1,12 +1,14 @@
 import React from 'react'
-
+import { useStateContext } from '../Context/index'
 const index = () => {
+  const {
+    buyToken,
+  } = useStateContext();
   return (
     <div>
-        ICO Marketplace
-      <h1>ICO Marketplace</h1>
+      <footer />
     </div>
-  )
+  ) 
 }
 
 export default index

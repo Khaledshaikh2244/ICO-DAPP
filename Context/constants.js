@@ -20,63 +20,60 @@ export const PINATA_SECRET_KEY = process.env.NEXT_PUBLIC_PINATA_SECRET_KEY;
 // Network config
 const networks = {
     polygon_amoy: {
-        chainId: `0x${Number(8002).toString(16)}`,
+        chainId: `0x${Number(80002).toString(16)}`,
         chainName: "Polygon Amoy",
         nativeCurrency: {
-            name: "MATIC",
-            symbol: "MAT",
+            name: "MATIC",  // Adjust this based on MetaMask warnings
+            symbol: "MATIC", // Adjust this based on MetaMask warnings
             decimals: 18,
         },
         rpcUrls: ["https://rpc-amoy.polygon.technology/"],
         blockExplorerUrls: ["https://www.oklink.com/amoy"],
     },
-    polygon: {
-        chainId: `0x${Number(137).toString(16)}`,
-        chainName: "Polygon Mainnet",
-        nativeCurrency: {
-            name: "MATIC",
-            symbol: "MATIC",
-            decimals: 18,
+    localhost: {
+        chainId: `0x${Number(31337).toString(16)}`,
+        chainName : "localhost",
+        nativeCurrency :{
+            name : "GO",
+            symbol: "GO",
+            decimals : 18,
         },
-        rpcUrls: ["https://rpc.ankr.com/polygon"],
-        blockExplorerUrls: ["https://www.polyscan.com"],
+        rpcUrls : ["http: //127.0.0.1:8545/"],
+        blockExplorerUrls :["https://bscscan.com"],
     },
-    bsc: {
-        chainId: `0x${Number(56).toString(16)}`,
-        chainName: "Binance Mainnet",
-        nativeCurrency: {
-            name: "Binance Chain",
-            symbol: "BNB",
-            decimals: 18,
-        },
-        rpcUrls: ["https://rpc.ankr.com/bsc"],
-        blockExplorerUrls: ["https://www.bscscan.com"],
-    },
-    base_mainnet: {
-        chainId: `0x${Number(56).toString(16)}`,
-        chainName: "Base Mainnet",
-        nativeCurrency: {
-            name: "ETH",
-            symbol: "ETH",
-            decimals: 18,
-        },
-        rpcUrls: ["https://base.mainnet.org"],
-        blockExplorerUrls: ["https://www.bscscan.com"],
-    },
+    // Add other networks as needed
 };
+
+// Flag to prevent multiple network switch requests
+let isSwitchingNetwork = false;
 
 // Function to switch network
 const changeNetwork = async (networkName) => {
+    // Check if a network switch is already in progress
+    if (isSwitchingNetwork) {
+        console.log("Network switch request is already pending. Please wait.");
+        return;
+    }
+
+    isSwitchingNetwork = true;
+
     try {
         const network = networks[networkName];
         if (!network) {
-            console.error(`Network ${networkName} not found in networks object.`);
+            console.error(`Network ${networkName} not found.`);
             return;
         }
 
-        console.log('Switching to network:', networkName, network);
-
         if (!window.ethereum) throw new Error("No crypto Wallet found");
+
+        // Safely check for pending requests
+        const pendingRequests = window.ethereum._state?.pendingRequests;
+        if (pendingRequests && pendingRequests.length > 0) {
+            console.log("A network switch request is already pending.");
+            return;
+        }
+
+        // Request to switch network
         await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [{
@@ -91,6 +88,8 @@ const changeNetwork = async (networkName) => {
         console.log(`Successfully switched to network ${networkName}`);
     } catch (error) {
         console.error(`Error changing network: ${error.message}`);
+    } finally {
+        isSwitchingNetwork = false;
     }
 };
 
@@ -98,63 +97,50 @@ const changeNetwork = async (networkName) => {
 export const handleNetworkSwitch = async () => {
     const networkName = "polygon_amoy";
     await changeNetwork(networkName);
-}
+};
 
 // Shortening the address
 export const shortenAddress = (address) => `${address?.slice(0, 5)}...${address?.slice(address.length - 4)}`;
 
 // Contract functionality
 
-// Reusable function
+// Reusable function to fetch contract
 const fetchContract = (address, abi, signer) => new ethers.Contract(address, abi, signer);
 
 // Functionality to interact with ICOMarketContract
-// Making connection using Web3Modal
 export const ICO_MARKETPLACE_CONTRACT = async () => {
     try {
         const web3Modal = new Web3Modal();
         const connection = await web3Modal.connect();
+
         // Getting provider
         const provider = new ethers.providers.Web3Provider(connection);
 
         // Getting signer
         const signer = provider.getSigner();
 
-        // Calling fetch contract internally to return contract
-        const contract = fetchContract(
-            ICO_MARKETPLACE_ADDRESS,
-            ICO_MARKETPLACE_ABI,
-            signer
-        );
-
-        // Returning for calling in required function
-        return contract;
+        // Fetching and returning contract
+        return fetchContract(ICO_MARKETPLACE_ADDRESS, ICO_MARKETPLACE_ABI, signer);
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 // Token Contract
 export const TOKEN_CONTRACT = async (TOKEN_ADDRESS) => {
     try {
         const web3Modal = new Web3Modal();
         const connection = await web3Modal.connect();
+
         // Getting provider
         const provider = new ethers.providers.Web3Provider(connection);
 
         // Getting signer
         const signer = provider.getSigner();
 
-        // Calling fetch contract internally to return contract
-        const contract = fetchContract(
-            TOKEN_ADDRESS,
-            ERC20Generator_ABI,
-            signer
-        );
-
-        // Returning for calling in required function
-        return contract;
+        // Fetching and returning contract
+        return fetchContract(TOKEN_ADDRESS, ERC20Generator_ABI, signer);
     } catch (error) {
         console.log(error);
     }
-}
+};
