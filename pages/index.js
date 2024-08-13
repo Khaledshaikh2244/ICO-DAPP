@@ -26,11 +26,58 @@ import TokenTransfer from "../Components/TokenTransfer";
 
 const index = () => {
  
- const {} = useStateContext()
+ const {
+        withDrawToken,
+        transferToken,
+        buyToken,
+        createICOSALE,
+        GET_ICO_USER_SALE_TOKEN,
+        GET_ALL_ICO_SALE_TOKEN,
+        _createERC20,
+        connectWallet,
+        PINATA_API_KEY,
+        PINATA_SECRET_KEY,
+        ICO_MARKETPLACE_ADDRESS,
+        openBuyToken,
+        setOpenBuyToken,
+        openWithDrawToken, setOpenWithDrawToken,
+        openTransferToken, setOpenTransferToken,
+        openTokenCreator, setOpenTokenCreator,
+        openCreateICO, setOpenCreateICO,
+        address, setAddress,
+        accountBalance,
+        loader,
+        setLoader,
+        currency,
+        shortenAddress, 
+ } = useStateContext()
+
+ const notifySuccess = (msg) => { toast.success(msg, { duration: 200 }) };
+ const notifyError = (msg) => { toast.error(msg, { duration: 200 }) };
+
+ const [allICOs,setAllICOs] = useState();
+ const [allUserIcos, setAllUserIcos] = useState();
+
+//  COMPONENTES OPEN
+const [openAllICO, setopenAllICO] = useState(false);
+const [openTokenHistory, setopenTokenHistory] = useState(false);
+const [openICOMarketplace, setopenICOMarketplace] = useState(false);
+
+
+// 
+const [buyIco, setbuyIco] = useState(false);
+
+// copying address
+const copyAddress = () => { navigator.clipboard.writeText(ICO_MARKETPLACE_ADDRESS)
+      notifySuccess("Copied Successfully");
+};
+
+
   return (
     <div>
-     ICO ICO_MARKETPLACE_CONTRACT
-     <h1>ICO MARKKETPLACE</h1>
+    <Header />
+    <Footer />
+    <Loader />
     </div>
   ) 
 }

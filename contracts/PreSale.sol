@@ -16,6 +16,10 @@ interface IERC20 {
 contract ICOMarketplace{
 
 // tokenDetails
+// 2 address 
+// EOA = externally owned address
+// smart contract address
+
 struct TokenDetails {
     address token;
     bool supported;
