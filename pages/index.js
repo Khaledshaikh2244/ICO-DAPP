@@ -75,9 +75,24 @@ const copyAddress = () => { navigator.clipboard.writeText(ICO_MARKETPLACE_ADDRES
 
   return (
     <div>
-    <Header />
+    <Header
+    accountBalance= {accountBalance}
+    setAddress= {setAddress}
+    address= {address}
+    connectWallet = {connectWallet}
+    ICO_MARKETPLACE_ADDRESS = {ICO_MARKETPLACE_ADDRESS}
+    shortenAddress = {shortenAddress}
+    setopenAllICO = {setopenAllICO}
+    openAllICO = {openAllICO}
+    setOpenTokenCreator = {setOpenTokenCreator}
+    openTokenCreator = {openTokenCreator}
+    setopenTokenHistory = {setopenTokenHistory}
+    openTokenHistory = {openTokenHistory}
+    setopenICOMarketplace = {setopenICOMarketplace}
+    openICOMarketplace = {openICOMarketplace} 
+     />
     <Footer />
-    <Loader />
+    {/* <Loader /> */}
     </div>
   ) 
 }

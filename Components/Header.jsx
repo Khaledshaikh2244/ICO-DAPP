@@ -1,6 +1,20 @@
 import React from "react";
 
-const Header = () => {
+const Header = ({
+    accountBalance,
+    setAddress,
+    address,    connectWallet ,
+    ICO_MARKETPLACE_ADDRESS ,
+    shortenAddress ,
+    setopenAllICO ,
+    openAllICO ,
+    setOpenTokenCreator ,
+    openTokenCreator ,
+    setopenTokenHistory , 
+    openTokenHistory ,
+    setopenICOMarketplace  ,
+    openICOMarketplace  ,
+}) => {
   return <div>Header</div>;
 };
 

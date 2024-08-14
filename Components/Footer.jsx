@@ -16,7 +16,7 @@ const Footer = () => {
         
         <li>
           <a href = "/">Ico</a>
-        </li>
+        </li> 
         
       </ul>
    </div>
