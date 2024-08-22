@@ -1,5 +1,10 @@
 import React,{useState ,useEffect} from "react";
 
+// INTERNAL IMPORTS
+import Button from "./Button";
+import TokenHistory from "./TokenHistory";
+import TokenCreator from "./TokenCreator";
+
 const Header = ({
     accountBalance,
     setAddress,
@@ -18,7 +23,79 @@ const Header = ({
     openICOMarketplace,
   
 }) => {
-  return <div>Header</div>;
+  const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
+
+  useEffect(()=> {
+    if(typeof window.ethereum !== 'undefined'){
+      setisMetamaskInstalled(true);
+
+      window.ethereum.on("accountChanged", handleAccountChanged)
+    }
+
+    return() => {
+      if(typeof window.ethereum !== 'ubdefined'){
+        window.ethereum.removeListener(
+          "accountChanged",
+          handleAccountChanged
+        );
+      }
+    }
+  },[address])
+
+  const handleAccountChanged = (accounts) => {
+    setAddress(accounts[0]);
+  }
+
+  return <header className="header">
+    <nav>
+    <div className="logo">
+      <a href="/">
+      ICO.<span>Market</span></a>
+    </div>
+
+    <input type="checkbox" name="" id="menu-toggle" />
+      <label htmlFor="menu-toggle"
+      className="menu-icon">
+        &#9776;
+      </label>
+
+      <ul className="menu">
+        <li>
+          <a href="/">Home</a>
+        </li>
+
+        <li>
+          {/* <a onClick={()=> openICOMarketplace ? openICOMarketplace(false): setopenICOMarketplace(true) }></a> */}
+          <a onClick={() => setOpenICOMarketplace(!openICOMarketplace)}>ICO MArketplace</a>
+        </li>
+
+        <li>
+          <a onClick={() => setopenAllICO(!openAllICO)}>Created ICO </a>
+        </li>
+
+
+        <li>
+          <a onClick={() => setopenTokenHistory(!TokenHistory)}>History</a>
+        </li>
+
+
+        <li>
+          <a onClick={() => setOpenTokenCreator(!TokenCreator)}>Create Token</a>
+        </li>
+        
+          {address ? (
+            <li>
+              <Button name = {`${shortenAddress(address)}: ${accountBalance?.slice(0,5)} `} ></Button>
+            </li> 
+          ): (
+            <a onClick={() => setOpenTokenCreator(!TokenCreator)}>Create Token</a>
+          ) }
+       
+        
+      </ul>
+
+    </nav>
+    </header>;
 };
 
 export default Header;
