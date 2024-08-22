@@ -1,10 +1,12 @@
-import React from "react";
+import React,{useState ,useEffect} from "react";
 
 const Header = ({
     accountBalance,
     setAddress,
-    address,    connectWallet ,
+    address,
+    connectWallet ,
     ICO_MARKETPLACE_ADDRESS ,
+    shorteRKETPLACE_ADDRESS ,
     shortenAddress ,
     setopenAllICO ,
     openAllICO ,
@@ -12,8 +14,9 @@ const Header = ({
     openTokenCreator ,
     setopenTokenHistory , 
     openTokenHistory ,
-    setopenICOMarketplace  ,
-    openICOMarketplace  ,
+    setopenICOMarketplace,
+    openICOMarketplace,
+  
 }) => {
   return <div>Header</div>;
 };

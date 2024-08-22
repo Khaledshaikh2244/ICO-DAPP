@@ -91,8 +91,15 @@ const copyAddress = () => { navigator.clipboard.writeText(ICO_MARKETPLACE_ADDRES
     setopenICOMarketplace = {setopenICOMarketplace}
     openICOMarketplace = {openICOMarketplace} 
      />
+     {openAllICO  && ( <ICOMarket /> )}
+     {openTokenHistory ? <TokenCreator /> : null} 
+     {openCreateICO && <CreateICO />}
+     {openICOMarketplace && <ICOMarket />}
+     {openBuyToken && <BuyToken />}
+     {openTransferToken && <transferToken/>}
+     {openWithDrawToken && <withDrawToken />}
     <Footer />
-    {/* <Loader /> */}
+    {loader && <Loader />}
     </div>
   ) 
 }
