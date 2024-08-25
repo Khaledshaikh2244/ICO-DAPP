@@ -32,7 +32,7 @@ const Header = ({
     }
 
     return () => {
-      if (typeof window.ethereum !== "ubdefined") {
+      if (typeof window.ethereum !== "undefined") {
         window.ethereum.removeListener("accountChanged", handleAccountChanged);
       }
     };
@@ -83,13 +83,14 @@ const Header = ({
           </li>
 
           {address ? (
-            <li>
+          <li>
               <Button
                 name={`${shortenAddress(address)}: ${accountBalance?.slice(0, 5)} `}
               ></Button>
             </li>
           ) : (
-            <Button name="Connect Wallet" handleCLick></Button>
+          
+           <li> <Button name="Connect Wallet" handleCLick= {connectWallet}></Button></li>
           )}
         </ul>
       </nav>
