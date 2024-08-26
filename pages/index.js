@@ -14,7 +14,7 @@ import Loader from "../Components/Loader";
 import Footer from "../Components/Footer";
 import ICOMarket from "../Components/ICOMarket";
 import TokenCreator from "../Components/TokenCreator";
-import TokenHistoryr from "../Components/TokenHistory";
+import TokenHistory from "../Components/TokenHistory";
 import Marketplace from "../Components/Marketplace";
 import CreateICO from "../Components/CreateICO";
 import Card from "../Components/Card";
@@ -92,7 +92,9 @@ const copyAddress = () => { navigator.clipboard.writeText(ICO_MARKETPLACE_ADDRES
     openICOMarketplace = {openICOMarketplace} 
      />
      {openAllICO  && ( <ICOMarket /> )}
-     {openTokenHistory ? <TokenCreator /> : null} 
+     {openTokenCreator ? <TokenCreator /> : null}
+     {openTokenHistory ? <TokenHistory /> : null} 
+
      {openCreateICO && <CreateICO />}
      {openICOMarketplace && <ICOMarket />}
      {openBuyToken && <BuyToken />}
