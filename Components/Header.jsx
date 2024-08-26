@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 
 // INTERNAL IMPORTS
 import Button from "./Button";
-import TokenHistory from "./TokenHistory";
-import TokenCreator from "./TokenCreator";
+// import TokenHistory from "./TokenHistory";
+// import TokenCreator from "./TokenCreator";
 
 const Header = ({
   accountBalance,
@@ -73,11 +73,11 @@ const Header = ({
           </li>
 
           <li>
-            <a onClick={() => setopenTokenHistory(!TokenHistory)}>History</a>
+            <a onClick={() => setopenTokenHistory(!openTokenHistory)}>History</a>
           </li>
 
           <li>
-            <a onClick={() => setOpenTokenCreator(!TokenCreator)}>
+            <a onClick={() => setOpenTokenCreator(!openTokenCreator)}>
               Create Token
             </a>
           </li>
