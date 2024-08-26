@@ -5,6 +5,8 @@ import {useDropzone} from "react-dropzone";
 
 //INTERNALL IMPORTS
 import UpoloadICON from "./SVG/UploadICON";
+import Image from "next/image";
+import UploadICON from "./SVG/UploadICON";
 
 const UploadLogo = ({
   imageURL, 
@@ -53,7 +55,35 @@ const uploadIPFS = async(file) => {
     }
   }
 }
-  return <div>UploadLogo</div>;
+  const onDrop = useCallback(async(acceptFile) => {
+    await uploadIPFS(acceptFile[0]);
+  });
+
+  const {getInputProps, getRootProps} = useDropzone({onDrop, maxSize: 500000000000})
+
+  return <>
+  { 
+      
+    imageURL ? (
+      <div> <img src = {imageURL} style={{width : "200px", height : "auto"}} alt = "" /></div>
+    ) : (
+      <div {...getRootProps}>
+        <label htmlFor="file"
+        className="custum-file-upload">
+          <div className="icon">
+            <UploadICON />
+          </div>
+          <div className="text">
+            <span>Click To Upload Logo</span>
+          </div>
+          <input type="file" id ="file" {...getInputProps}/>
+        </label>
+
+      </div>
+
+    )  
+  }
+  </>;
 };
 
 export default UploadLogo;
