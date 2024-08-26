@@ -93,6 +93,7 @@ export const StateContextProvider = ({ children }) => {
                 const bal = ethers.utils.formatEther(getBalance);
                 setAccountBalance(bal);
                 return accounts[0];
+               
             } else {
                 notifyError("No account found");
             }
