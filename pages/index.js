@@ -33,7 +33,7 @@ const index = () => {
         createICOSALE,
         GET_ICO_USER_SALE_TOKEN,
         GET_ALL_ICO_SALE_TOKEN,
-        _createERC20,
+        createERC20,
         connectWallet,
         PINATA_API_KEY,
         PINATA_SECRET_KEY,
@@ -92,9 +92,18 @@ const copyAddress = () => { navigator.clipboard.writeText(ICO_MARKETPLACE_ADDRES
     openICOMarketplace = {openICOMarketplace} 
      />
      {openAllICO  && ( <ICOMarket /> )}
-     {openTokenCreator ? <TokenCreator /> : null}
-     {openTokenHistory ? <TokenHistory /> : null} 
-
+     {openTokenCreator ? 
+     <TokenCreator 
+      createERC= {createERC20} 
+      shortenAddress = {shortenAddress} 
+      openTokenCreator = {setOpenTokenCreator}
+      setLoader = {setLoader}
+      address = {address}
+      connectWallet = {connectWallet}
+      PINATA_API_KEY = {PINATA_API_KEY}
+      PINATA_SECRET_KEY = {PINATA_SECRET_KEY}
+     /> : null}
+     {openTokenHistory ? <TokenHistory  /> : null} 
      {openCreateICO && <CreateICO />}
      {openICOMarketplace && <ICOMarket />}
      {openBuyToken && <BuyToken />}
